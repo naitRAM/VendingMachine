@@ -1,14 +1,15 @@
 package com.sg.ramimans.vendingmachine.vendingmachine;
 
+import com.sg.ramimans.vendingmachine.dao.InventoryAuditFileImpl;
 import com.sg.ramimans.vendingmachine.dto.Product;
 import com.sg.ramimans.vendingmachine.dao.InventoryFileImpl;
+import com.sg.ramimans.vendingmachine.dao.InventoryPersistenceException;
 import com.sg.ramimans.vendingmachine.dto.Change;
+import com.sg.ramimans.vendingmachine.service.InsufficientFundsException;
+import com.sg.ramimans.vendingmachine.service.NoItemInventoryException;
 import com.sg.ramimans.vendingmachine.service.VendingMachineServiceLayerImpl;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,11 @@ import java.util.Map;
  */
 public class App {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws InventoryPersistenceException, NoItemInventoryException, InsufficientFundsException {
         
         InventoryFileImpl testInventory = new InventoryFileImpl();
-        VendingMachineServiceLayerImpl testService = new VendingMachineServiceLayerImpl(testInventory);
+        InventoryAuditFileImpl testAudit = new InventoryAuditFileImpl();
+        VendingMachineServiceLayerImpl testService = new VendingMachineServiceLayerImpl(testInventory, testAudit);
         List<Product> inventoryList = testService.getAllProducts();
         System.out.println("Balance: $" + testService.getBalance());
         for (Product product : inventoryList) {

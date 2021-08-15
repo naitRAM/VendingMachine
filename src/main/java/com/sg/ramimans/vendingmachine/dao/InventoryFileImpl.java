@@ -33,7 +33,7 @@ public class InventoryFileImpl {
         this.INVENTORY_FILE = fileName;
     }
     
-    public List<Product> getAllProducts () throws IOException {
+    public List<Product> getAllProducts () throws InventoryPersistenceException {
         this.loadInventory();
         return this.inventoryList.stream().collect(Collectors.toList());
     }
@@ -43,13 +43,13 @@ public class InventoryFileImpl {
         return this.inventoryList.stream().filter((p) -> p.getPosition().equals(position)).findFirst().get();
     }
             
-    public void loadInventory() throws IOException {
+    public void loadInventory() throws InventoryPersistenceException {
         
         Scanner fileInput;
         try {
             fileInput = new Scanner(new BufferedReader(new FileReader(INVENTORY_FILE)));
         } catch (FileNotFoundException e) {
-            throw new IOException(e);
+            throw new InventoryPersistenceException("Could not load inventory into memory");
         } 
         inventoryList.clear();
         String currentLine;
@@ -63,18 +63,18 @@ public class InventoryFileImpl {
         
     }
     
-    public void setProductQuantity(String position, long quantity) throws IOException {
+    public void setProductQuantity(String position, long quantity) throws InventoryPersistenceException {
         Product productToSet = this.getProduct(position);
         productToSet.setQuantity(quantity);
         this.writeInventory();
     }
     
-    public void writeInventory() throws IOException {
+    public void writeInventory() throws InventoryPersistenceException{
         PrintWriter fileOutput; 
         try {
             fileOutput = new PrintWriter(new FileWriter(INVENTORY_FILE));
         } catch (IOException e) {
-            throw new IOException(e);
+            throw new InventoryPersistenceException("Could not save inventory changes");
         }
         this.inventoryList.stream().forEach((product) -> {
             String entry = marshallProduct(product);
