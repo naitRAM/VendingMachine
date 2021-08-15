@@ -23,34 +23,52 @@ public class App {
         
         InventoryFileImpl testInventory = new InventoryFileImpl();
         InventoryAuditFileImpl testAudit = new InventoryAuditFileImpl();
+        
         VendingMachineServiceLayerImpl testService = new VendingMachineServiceLayerImpl(testInventory, testAudit);
+        
+        // getallProducts() will load the inventory
         List<Product> inventoryList = testService.getAllProducts();
-        System.out.println("Balance: $" + testService.getBalance());
+        
+        // print service layer balance, should be $0.00 since user did not deposit yet
+        System.out.println("Balance: $" + testService.getBalance()+ "\n");
+        
+        // list all products from inventory including price and quantity
         for (Product product : inventoryList) {
             System.out.println(product.getTitle() + " - $" + product.getPrice() + " - " + product.getQuantity());
         }
         
+        // add funds from user to service layer and verify value
+        System.out.println("\nAdd $2.73 to balance");
         BigDecimal funds = new BigDecimal("2.73").setScale(2, RoundingMode.HALF_UP);
         Change fundsToAdd = new Change(funds);
         testService.addBalance(fundsToAdd);
-        System.out.println("Balance: $" + testService.getBalance());
+        System.out.println("\nBalance: $" + testService.getBalance());
+        
+        // purchase item in position "C1", should decrement KitKat amount in inventory (DAO)
+        System.out.println("\nUser purchases KitKat \n");
         testService.processPurchase("C1");
+        
+        // show products and counts again, notice KitKat quantity
         inventoryList = testInventory.getAllProducts();
         for (Product product : inventoryList) {
             System.out.println(product.getTitle() + " - $" + product.getPrice() + " - " + product.getQuantity());
         }
         
-        System.out.println("Balance: $" + testService.getBalance());
+        // show balance after removing price of KitKat from it
+        System.out.println("\nBalance: $" + testService.getBalance());
+        
+        // return change from service layer, balance should be $0.00 after this
         Change changeDue = testService.returnChange();
+        System.out.println("\nReturning remaining balance to user");
         
-       
-        
+        // display coin count for each coin type
         Map<String, BigDecimal> coinsToCount = changeDue.getChange();
-        System.out.println(coinsToCount.get("QUARTER"));
-        System.out.println(coinsToCount.get("DIME"));
-        System.out.println(coinsToCount.get("NICKEL"));
-        System.out.println(coinsToCount.get("PENNY"));
-        
-        System.out.println("Balance: $" + testService.getBalance());
+        System.out.println("\nquarter count = " + coinsToCount.get("QUARTER"));
+        System.out.println("dime count = " + coinsToCount.get("DIME"));
+        System.out.println("nickel count = " + coinsToCount.get("NICKEL"));
+        System.out.println("penny count = " + coinsToCount.get("PENNY"));
+       
+        // should display $0.00
+        System.out.println("\nBalance: $" + testService.getBalance());
     }
 }

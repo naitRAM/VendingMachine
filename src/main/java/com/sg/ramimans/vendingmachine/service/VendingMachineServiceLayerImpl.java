@@ -45,7 +45,7 @@ public class VendingMachineServiceLayerImpl {
         }
             this.decrementProductQuantity(position, inventoryQuantity);
             this.balance = this.balance.subtract(purchasePrice);
-            audit.writeAuditEntry("Sold " + inInventory.getTitle() + " for $" + purchasePrice + " to user. Balance = $" 
+            audit.writeAuditEntry("Sold " + inInventory.getTitle() + " from " + position + " for $" + purchasePrice + " to user. Balance = $" 
                 + this.getBalance());
         
         
