@@ -38,8 +38,13 @@ public class InventoryFileImpl {
         return this.inventoryList.stream().collect(Collectors.toList());
     }
     
-    public Product getProduct(String position) {
-       
+    public void addProduct(Product product) throws InventoryPersistenceException {
+        this.inventoryList.add(product);
+        this.writeInventory();
+    }
+    
+    public Product getProduct(String position) throws InventoryPersistenceException {
+        this.loadInventory();
         return this.inventoryList.stream().filter((p) -> p.getPosition().equals(position)).findFirst().get();
     }
             
