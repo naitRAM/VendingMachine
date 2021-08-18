@@ -53,12 +53,12 @@ public class VendingMachineServiceLayerImpl {
         audit.writeAuditEntry("Added $" + value.toString() + " to balance. Balance = $" + updatedBalance);
     }
 
-    public BigDecimal getBalance() {
+    private BigDecimal getBalance() {
         return this.balance;
 
     }
 
-    public void setBalance(BigDecimal newBalance) {
+    private void setBalance(BigDecimal newBalance) {
         this.balance = newBalance;
     }
 
@@ -76,11 +76,11 @@ public class VendingMachineServiceLayerImpl {
         return this.dao.getAllProducts();
     }
 
-    public Product getProduct(String position) {
+    public Product getProduct(String position) throws InventoryPersistenceException {
         return this.dao.getProduct(position);
     }
 
-    public void decrementProductQuantity(String position, long quantity) throws InventoryPersistenceException {
+    private void decrementProductQuantity(String position, long quantity) throws InventoryPersistenceException {
         this.dao.setProductQuantity(position, quantity - 1);
     }
 }

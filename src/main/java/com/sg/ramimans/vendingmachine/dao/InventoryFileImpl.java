@@ -65,7 +65,6 @@ public class InventoryFileImpl {
             inventoryList.add(currentProduct);
             
         }
-        
     }
     
     public void setProductQuantity(String position, long quantity) throws InventoryPersistenceException {

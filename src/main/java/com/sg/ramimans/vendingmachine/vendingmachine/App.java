@@ -1,5 +1,6 @@
 package com.sg.ramimans.vendingmachine.vendingmachine;
 
+import com.sg.ramimans.vendingmachine.controller.VendingMachineController;
 import com.sg.ramimans.vendingmachine.dao.InventoryAuditFileImpl;
 import com.sg.ramimans.vendingmachine.dto.Product;
 import com.sg.ramimans.vendingmachine.dao.InventoryFileImpl;
@@ -26,6 +27,9 @@ public class App {
         
         VendingMachineServiceLayerImpl testService = new VendingMachineServiceLayerImpl(testInventory, testAudit);
         
+        VendingMachineController controller = new VendingMachineController(testService);
+        controller.run();
+        /*
         // getallProducts() will load the inventory
         List<Product> inventoryList = testService.getAllProducts();
         
@@ -70,5 +74,6 @@ public class App {
        
         // should display $0.00
         System.out.println("\nBalance: $" + testService.getBalance());
+        */
     }
 }
