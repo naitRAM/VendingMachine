@@ -25,37 +25,40 @@ public class InventoryFileImpl implements Inventory {
 
     public InventoryFileImpl() {
         this.INVENTORY_FILE = "products.txt";
-        
-        
+
     }
-    
+
     public InventoryFileImpl(String fileName) {
         this.INVENTORY_FILE = fileName;
     }
+
     @Override
-    public List<Product> getAllProducts () throws InventoryPersistenceException {
+    public List<Product> getAllProducts() throws InventoryPersistenceException {
         this.loadInventory();
         return this.inventoryList.stream().collect(Collectors.toList());
     }
+
     @Override
-    public void addProduct(Product product) throws InventoryPersistenceException {
+    public Product addProduct(Product product) throws InventoryPersistenceException {
         this.inventoryList.add(product);
         this.writeInventory();
+        return this.getProduct(product.getPosition());
     }
+
     @Override
     public Product getProduct(String position) throws InventoryPersistenceException {
         this.loadInventory();
         return this.inventoryList.stream().filter((p) -> p.getPosition().equals(position)).findFirst().get();
     }
-          
+
     private void loadInventory() throws InventoryPersistenceException {
-        
+
         Scanner fileInput;
         try {
             fileInput = new Scanner(new BufferedReader(new FileReader(INVENTORY_FILE)));
         } catch (FileNotFoundException e) {
             throw new InventoryPersistenceException("Could not load inventory into memory");
-        } 
+        }
         inventoryList.clear();
         String currentLine;
         Product currentProduct;
@@ -63,18 +66,20 @@ public class InventoryFileImpl implements Inventory {
             currentLine = fileInput.nextLine();
             currentProduct = unmarshallProduct(currentLine);
             inventoryList.add(currentProduct);
-            
+
         }
     }
+
     @Override
-    public void setProductQuantity(String position, long quantity) throws InventoryPersistenceException {
+    public Product setProductQuantity(String position, long quantity) throws InventoryPersistenceException {
         Product productToSet = this.getProduct(position);
         productToSet.setQuantity(quantity);
         this.writeInventory();
+        return this.getProduct(position);
     }
-    
-    private void writeInventory() throws InventoryPersistenceException{
-        PrintWriter fileOutput; 
+
+    private void writeInventory() throws InventoryPersistenceException {
+        PrintWriter fileOutput;
         try {
             fileOutput = new PrintWriter(new FileWriter(INVENTORY_FILE));
         } catch (IOException e) {
@@ -86,9 +91,9 @@ public class InventoryFileImpl implements Inventory {
             fileOutput.flush();
         });
         fileOutput.close();
-        
+
     }
-    
+
     private Product unmarshallProduct(String entry) {
         Product unmarshalledProduct;
         String[] fieldArray = entry.split(DELIMITER);
@@ -99,16 +104,14 @@ public class InventoryFileImpl implements Inventory {
         unmarshalledProduct = new Product(productPosition, productName, productValue, productQuantity);
         return unmarshalledProduct;
     }
-    
+
     private String marshallProduct(Product product) {
-        
+
         String productToEntry = product.getPosition() + DELIMITER;
         productToEntry += product.getTitle() + DELIMITER;
         productToEntry += product.getPrice() + DELIMITER;
         productToEntry += product.getQuantity();
         return productToEntry;
     }
-    
-    
-    
+
 }

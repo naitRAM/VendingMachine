@@ -1,2 +1,1 @@
-A1::KitKat::1.25::10
-C3::Doritos Ranch::1.50::6
+A1::KitKat::1.25::9

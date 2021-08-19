@@ -1,0 +1,3 @@
+2021-08-18T23:47:53.476079100: Added $1.93 to balance. Balance = $1.93
+2021-08-18T23:48:12.561234: Sold Mars from C2 for $1.25 to user. Balance = $0.68
+2021-08-18T23:48:12.568215300: Returned $0.68 to user. Balance = $0.00

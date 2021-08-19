@@ -7,7 +7,7 @@ B2::Ruffles Sour Cream'n Onion::1.50::9
 B3::Lay's Oven Baked Original::1.75::10
 B4::Lay's Salt & Vinegar::1.50::10
 C1::KitKat::1.25::8
-C2::Mars::1.25::10
+C2::Mars::1.25::9
 C3::Skittles Original::1.00::10
 C4::Skittles Sour::1.00::10
 D1::Starburst Tropical::1.00::10

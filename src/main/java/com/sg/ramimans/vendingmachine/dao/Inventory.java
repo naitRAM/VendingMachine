@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface Inventory {
     List<Product> getAllProducts () throws InventoryPersistenceException;
-    void addProduct(Product product) throws InventoryPersistenceException;
+    Product addProduct(Product product) throws InventoryPersistenceException;
     Product getProduct(String position) throws InventoryPersistenceException;
-    void setProductQuantity(String position, long quantity) throws InventoryPersistenceException;
+    Product setProductQuantity(String position, long quantity) throws InventoryPersistenceException;
 }
