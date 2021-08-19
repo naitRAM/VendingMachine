@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author rmans
  */
 public class InventoryFileImplTest {
-    public InventoryFileImpl testDao;
+    public Inventory testDao;
     public InventoryFileImplTest() {
     }
     
@@ -69,7 +69,12 @@ public class InventoryFileImplTest {
         assertEquals(2, allProducts.size(), "List of products should have 2 products only.");
         
         // add more specific tests
+        assertTrue(testDao.getAllProducts().contains(kitKat));
+        assertTrue(testDao.getAllProducts().contains(doritosRanch));
         
     }
+    
+    
+    
     
 }

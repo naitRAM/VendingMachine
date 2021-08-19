@@ -1,17 +1,14 @@
 package com.sg.ramimans.vendingmachine.controller;
 
-import com.sg.ramimans.vendingmachine.dao.InventoryFileImpl;
 import com.sg.ramimans.vendingmachine.dao.InventoryPersistenceException;
 import com.sg.ramimans.vendingmachine.dto.Change;
 import com.sg.ramimans.vendingmachine.dto.Product;
 import com.sg.ramimans.vendingmachine.service.InsufficientFundsException;
 import com.sg.ramimans.vendingmachine.service.NoItemInventoryException;
+import com.sg.ramimans.vendingmachine.service.VendingMachineServiceLayer;
 import com.sg.ramimans.vendingmachine.service.VendingMachineServiceLayerImpl;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.sg.ramimans.vendingmachine.userio.VendingMachineView;
 import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
 
 /**
  *
@@ -22,104 +19,54 @@ import java.util.Scanner;
  */
 public class VendingMachineController {
     
-    private final VendingMachineServiceLayerImpl service;
-    public VendingMachineController(VendingMachineServiceLayerImpl service) {
-        
+    private final VendingMachineServiceLayer service;
+    private final VendingMachineView view;
+    public VendingMachineController(VendingMachineServiceLayer service, VendingMachineView view) {
+        this.view = view;
         this.service = service;
     }
     public void run() throws InsufficientFundsException, NoItemInventoryException, InventoryPersistenceException {
         List<Product> menuItems = this.service.getAllProducts();
-        this.printMenuItems(menuItems);
+        this.view.printMenuItems(menuItems);
         
-        if (this.userAgrees("select an item")) {
-            Change deposit = this.getUserDeposit();
+        if (this.view.userAgrees("select an item")) {
+            Change deposit = this.view.getUserDeposit();
             this.service.addBalance(deposit);
         } else {
             return;
         }
-        String userSelection = this.getUserSelection();
+        String userSelection = this.view.getUserSelection(menuItems);
         Boolean notDoneYet = true;
         do {
             try {
-                service.processPurchase(userSelection);
-                System.out.println("Dispensing " + userSelection);
+                this.service.processPurchase(userSelection);
+                this.view.displayDispenseSuccess(this.service.getProduct(userSelection));
                 notDoneYet = false;
             } catch (NoItemInventoryException e) {
-                System.out.println(e.getMessage());
-                if (this.userAgrees("choose another item")) {
-                    userSelection = this.getUserSelection();
+                this.view.displayMessage(e.getMessage());
+                if (this.view.userAgrees("choose another item")) {
+                    userSelection = this.view.getUserSelection(menuItems);
                 } else {
                     notDoneYet = false;
                 }
             } catch (InsufficientFundsException e) {
-                System.out.println(e.getMessage());
-                if (this.userAgrees("add more balance")) {
-                    Change deposit = this.getUserDeposit();
-                    service.addBalance(deposit);
+                this.view.displayMessage(e.getMessage());
+                if (this.view.userAgrees("add more balance")) {
+                    Change deposit = this.view.getUserDeposit();
+                    this.service.addBalance(deposit);
                 } else {
-                notDoneYet = false;
+                    notDoneYet = false;
                 }
             }
         } while (notDoneYet);
         
         Change userChange = this.service.returnChange();
         
-        this.printChangeReturned(userChange.getChange());
+        this.view.displayChangeReturned(userChange.getChange());
         
     }
     
-    public void printMenuItems(List<Product> products) {
-        
-        String DELIMITER = "  ";
-        for (Product product : products) {
-            if (product.getQuantity() > 0) {
-                System.out.print(product.getPosition() + DELIMITER);
-                System.out.print(product.getTitle() + DELIMITER);
-                System.out.print("$" + product.getPrice() + DELIMITER);
-                System.out.println();
-            } 
-        }
-    }
     
-    public String getUserSelection() {
-        Scanner userInput = new Scanner(System.in);
-        String userChoice;
-        System.out.println("Choose item by position (e.g. A1)");
-        userChoice = userInput.nextLine();
-        return userChoice;
-    }
-    
-    public Boolean userAgrees(String action) {
-        Scanner userInput = new Scanner(System.in);
-        String userResponse;
-        Boolean willSelect = false;
-        System.out.println("Enter 'y' to " + action + " or 'n' to exit:");
-        userResponse = userInput.nextLine();
-        if (userResponse.equals("y")) {
-            willSelect = true;
-        } 
-        return willSelect;
-
-    }
-    
-    public Change getUserDeposit(){
-        Scanner userInput = new Scanner(System.in);
-        String userAmount;
-        System.out.println("Deposit funds to continue (e.g. 1.50): ");
-        userAmount = userInput.nextLine();
-        Change amount = new Change(new BigDecimal(userAmount).setScale(2, RoundingMode.HALF_UP));
-        return amount;
-    }
-    
-    public void printChangeReturned(Map<String, BigDecimal> coinsToCount) {
-        
-        System.out.println("Returning change:");
-        System.out.println("-----------------");
-        System.out.println("\nquarter count = " + coinsToCount.get("QUARTER"));
-        System.out.println("dime count = " + coinsToCount.get("DIME"));
-        System.out.println("nickel count = " + coinsToCount.get("NICKEL"));
-        System.out.println("penny count = " + coinsToCount.get("PENNY"));
-    }
 }
 
 

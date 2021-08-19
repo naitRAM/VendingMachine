@@ -1,5 +1,7 @@
 package com.sg.ramimans.vendingmachine.service;
 
+import com.sg.ramimans.vendingmachine.dao.Inventory;
+import com.sg.ramimans.vendingmachine.dao.InventoryAudit;
 import com.sg.ramimans.vendingmachine.dao.InventoryAuditFileImpl;
 import com.sg.ramimans.vendingmachine.dao.InventoryFileImpl;
 import com.sg.ramimans.vendingmachine.dao.InventoryPersistenceException;
@@ -13,18 +15,19 @@ import java.util.List;
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Aug. 13, 2021 purpose:
  */
-public class VendingMachineServiceLayerImpl {
+public class VendingMachineServiceLayerImpl implements VendingMachineServiceLayer {
 
-    private InventoryFileImpl dao;
-    private InventoryAuditFileImpl audit;
+    private Inventory dao;
+    private InventoryAudit audit;
     private BigDecimal balance;
 
-    public VendingMachineServiceLayerImpl(InventoryFileImpl dao, InventoryAuditFileImpl audit) {
+    public VendingMachineServiceLayerImpl(Inventory dao, InventoryAudit audit) {
         this.dao = dao;
         this.audit = audit;
         this.balance = new BigDecimal("0.00").setScale(2, RoundingMode.HALF_UP);
     }
 
+    @Override
     public void processPurchase(String position) throws InventoryPersistenceException, NoItemInventoryException, InsufficientFundsException {
 
         Product inInventory = this.getProduct(position);
@@ -45,6 +48,8 @@ public class VendingMachineServiceLayerImpl {
 
     }
 
+    @Override
+
     public void addBalance(Change funds) throws InventoryPersistenceException {
         BigDecimal value = funds.getValue();
         BigDecimal currentBalance = this.getBalance();
@@ -53,14 +58,18 @@ public class VendingMachineServiceLayerImpl {
         audit.writeAuditEntry("Added $" + value.toString() + " to balance. Balance = $" + updatedBalance);
     }
 
-    private BigDecimal getBalance() {
+    @Override
+    public BigDecimal getBalance() {
         return this.balance;
 
     }
 
+    
     private void setBalance(BigDecimal newBalance) {
         this.balance = newBalance;
     }
+
+    @Override
 
     public Change returnChange() throws InventoryPersistenceException {
         BigDecimal value = this.getBalance();
@@ -72,9 +81,13 @@ public class VendingMachineServiceLayerImpl {
         return changeToReturn;
     }
 
+    @Override
+
     public List<Product> getAllProducts() throws InventoryPersistenceException {
         return this.dao.getAllProducts();
     }
+
+    @Override
 
     public Product getProduct(String position) throws InventoryPersistenceException {
         return this.dao.getProduct(position);

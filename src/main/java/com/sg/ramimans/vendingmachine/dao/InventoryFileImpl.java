@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author Rami Mansieh email: rmansieh@gmail.com data: Aug. 13, 2021 purpose:
  */
-public class InventoryFileImpl {
+public class InventoryFileImpl implements Inventory {
 
     public final String INVENTORY_FILE;
     public static final String DELIMITER = "::";
@@ -32,23 +32,23 @@ public class InventoryFileImpl {
     public InventoryFileImpl(String fileName) {
         this.INVENTORY_FILE = fileName;
     }
-    
+    @Override
     public List<Product> getAllProducts () throws InventoryPersistenceException {
         this.loadInventory();
         return this.inventoryList.stream().collect(Collectors.toList());
     }
-    
+    @Override
     public void addProduct(Product product) throws InventoryPersistenceException {
         this.inventoryList.add(product);
         this.writeInventory();
     }
-    
+    @Override
     public Product getProduct(String position) throws InventoryPersistenceException {
         this.loadInventory();
         return this.inventoryList.stream().filter((p) -> p.getPosition().equals(position)).findFirst().get();
     }
-            
-    public void loadInventory() throws InventoryPersistenceException {
+          
+    private void loadInventory() throws InventoryPersistenceException {
         
         Scanner fileInput;
         try {
@@ -66,14 +66,14 @@ public class InventoryFileImpl {
             
         }
     }
-    
+    @Override
     public void setProductQuantity(String position, long quantity) throws InventoryPersistenceException {
         Product productToSet = this.getProduct(position);
         productToSet.setQuantity(quantity);
         this.writeInventory();
     }
     
-    public void writeInventory() throws InventoryPersistenceException{
+    private void writeInventory() throws InventoryPersistenceException{
         PrintWriter fileOutput; 
         try {
             fileOutput = new PrintWriter(new FileWriter(INVENTORY_FILE));
