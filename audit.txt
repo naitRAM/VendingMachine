@@ -1,3 +1,10 @@
 2021-08-18T23:47:53.476079100: Added $1.93 to balance. Balance = $1.93
 2021-08-18T23:48:12.561234: Sold Mars from C2 for $1.25 to user. Balance = $0.68
 2021-08-18T23:48:12.568215300: Returned $0.68 to user. Balance = $0.00
+2021-08-19T15:04:50.234460900: Added $1.50 to balance. Balance = $1.50
+2021-08-19T15:05:16.211531500: Sold Doritos Nacho Cheese from A3 for $1.50 to user. Balance = $0.00
+2021-08-19T15:05:16.227491500: Returned $0.00 to user. Balance = $0.00
+2021-08-19T15:05:45.473635600: Added $1.43 to balance. Balance = $1.43
+2021-08-19T15:06:10.258217900: Added $0.25 to balance. Balance = $1.68
+2021-08-19T15:06:10.305093400: Sold Lay's Salt & Vinegar from B4 for $1.50 to user. Balance = $0.18
+2021-08-19T15:06:10.313076: Returned $0.18 to user. Balance = $0.00

@@ -12,6 +12,8 @@ import com.sg.ramimans.vendingmachine.service.VendingMachineServiceLayerImpl;
 import com.sg.ramimans.vendingmachine.userio.UserIO;
 import com.sg.ramimans.vendingmachine.userio.UserIOConsoleImpl;
 import com.sg.ramimans.vendingmachine.userio.VendingMachineView;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -20,7 +22,7 @@ import com.sg.ramimans.vendingmachine.userio.VendingMachineView;
 public class App {
 
     public static void main(String[] args) throws InventoryPersistenceException, NoItemInventoryException, InsufficientFundsException {
-        
+        /*
         Inventory dao = new InventoryFileImpl();
         InventoryAuditFileImpl audit = new InventoryAuditFileImpl();
         VendingMachineServiceLayer service = new VendingMachineServiceLayerImpl(dao, audit);
@@ -28,6 +30,9 @@ public class App {
         VendingMachineView view = new VendingMachineView(io);
         VendingMachineController controller = new VendingMachineController(service, view);
         controller.run();
-        
+        */
+        ApplicationContext appContext = new ClassPathXmlApplicationContext("appContext.xml");
+        VendingMachineController controller = appContext.getBean("controller", VendingMachineController.class);
+        controller.run();
     }
 }

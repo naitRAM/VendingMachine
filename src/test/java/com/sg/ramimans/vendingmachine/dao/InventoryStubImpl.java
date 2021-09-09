@@ -1,4 +1,4 @@
-package com.sg.ramimans.vendingmachine.service;
+package com.sg.ramimans.vendingmachine.dao;
 
 import com.sg.ramimans.vendingmachine.dao.Inventory;
 import com.sg.ramimans.vendingmachine.dao.InventoryPersistenceException;

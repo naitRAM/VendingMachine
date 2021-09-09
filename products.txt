@@ -1,11 +1,11 @@
 A1::Lay's Classic::1.50::0
 A2::Doritos Ranch::1.50::9
-A3::Doritos Nacho Cheese::1.50::8
+A3::Doritos Nacho Cheese::1.50::7
 A4::Smartfood White Cheddar::1.50::10
 B1::Ruffles All Dressed::1.50::10
 B2::Ruffles Sour Cream'n Onion::1.50::9
 B3::Lay's Oven Baked Original::1.75::10
-B4::Lay's Salt & Vinegar::1.50::10
+B4::Lay's Salt & Vinegar::1.50::9
 C1::KitKat::1.25::8
 C2::Mars::1.25::9
 C3::Skittles Original::1.00::10

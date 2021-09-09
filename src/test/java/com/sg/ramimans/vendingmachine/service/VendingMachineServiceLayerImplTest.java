@@ -7,19 +7,15 @@ package com.sg.ramimans.vendingmachine.service;
 
 import com.sg.ramimans.vendingmachine.dao.Inventory;
 import com.sg.ramimans.vendingmachine.dao.InventoryAudit;
-import com.sg.ramimans.vendingmachine.dao.InventoryAuditFileImpl;
-import com.sg.ramimans.vendingmachine.dao.InventoryFileImpl;
 import com.sg.ramimans.vendingmachine.dao.InventoryPersistenceException;
 import com.sg.ramimans.vendingmachine.dto.Change;
 import com.sg.ramimans.vendingmachine.dto.Product;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -30,9 +26,13 @@ public class VendingMachineServiceLayerImplTest {
     private VendingMachineServiceLayer service;
 
     public VendingMachineServiceLayerImplTest() {
+        /*
         Inventory dao = new InventoryStubImpl();
         InventoryAudit auditDao = new InventoryAuditStubImpl();
         service = new VendingMachineServiceLayerImpl(dao, auditDao);
+        */
+        ApplicationContext appContext = new ClassPathXmlApplicationContext("appContext.xml");
+        service = appContext.getBean("serviceLayer", VendingMachineServiceLayerImpl.class);
     }
 
     @Test
